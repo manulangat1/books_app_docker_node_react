@@ -1,0 +1,43 @@
+version: "3.3"
+
+services:
+  liblary-api:
+    restart: always
+    build:
+         context: ./server
+         dockerfile: Dockerfile.dev
+    container_name: library-mern 
+    depends_on: 
+      - postgres
+    volumes:
+     - /app/node-modules
+     - ./server:/app  
+    ports:
+      - '5000:5000'
+    environment:
+         NODE_ENV: ${NODE_ENV}
+         POSTGRES_USER: ${db_username}
+         POSTGRES_PASSWORD: ${db_password}
+    networks: 
+      - liblary-api-pern
+    # # environment:
+    #   NODE_ENV: ${process.env.NODE_ENV}
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: ${db_username}
+      POSTGRES_PASSWORD: ${db_password}
+    ports: 
+      - '5434:5434'
+    volumes:
+      - lib-db:/var/lib/postgresql/data
+    networks: 
+      - liblary-api-pern
+networks:
+  liblary-api-pern:
+    driver: bridge
+volumes:
+  lib-db:
+  
+
+    
